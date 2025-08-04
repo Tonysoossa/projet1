@@ -1,100 +1,130 @@
-# Books Scraper Project
+# Scraper de Livres - Books.toscrape.com
 
-A Python web scraping project that extracts book information from the humor category of [Books to Scrape](https://books.toscrape.com/catalogue/category/books/humor_30/).
+Ce projet permet de scraper automatiquement des livres par catégorie disponibles sur le site [books.toscrape.com](https://books.toscrape.com).
 
-## Features
+## Fonctionnalités
 
-- Scrapes all books from the humor category across multiple pages
-- Extracts comprehensive book details including:
-  - UPC, title, prices (with and without tax)
-  - Product description and category
-  - Star rating and availability count
-  - Book URL and image URL
-- Downloads book cover images locally
-- Exports data to both CSV and JSON formats
-- Automatic pagination handling
-- Clean filename generation for images that match the book title
+- Récupération automatique de toutes les catégories
+- Scraping complet de tous les livres de chaque catégorie
+- Téléchargement des images avec noms de fichiers propres
+- Nettoyage des caractères parasites dans les textes
+- Export des données en CSV et JSON
+- Gestion des erreurs et reprise automatique
 
-## Setup
+## Prérequis
 
-1. Clone the repository:
-   ```bash
-   git clone <repository-url>
-   cd projet1
-   ```
+- Python 3.7+
+- Les dépendances listées dans `requirements.txt`
 
-2. Create a virtual environment:
-   ```bash
-   python3 -m venv venv
-   ```
+## Installation
 
-3. Activate the virtual environment:
-   ```bash
-   source venv/bin/activate  # On macOS/Linux
-   # or
-   venv\Scripts\activate     # On Windows
-   ```
+1. **Cloner le projet** (ou télécharger les fichiers)
 
-4. Install dependencies:
+2. **Installer les dépendances** :
    ```bash
    pip install -r requirements.txt
    ```
 
-## Usage
+3. **Vérifier l'installation** avec le test :
+   ```bash
+   python test_scraping.py
+   ```
 
-Run the scraper to extract all humor books:
+## Utilisation
+
+### Scraping complet (recommandé)
+
+Pour scraper **tous les livres de toutes les catégories** :
+
 ```bash
-python3 main.py
+python main.py
 ```
 
-The script will:
-- Create an `images/` directory for book covers
-- Scrape all pages in the humor category
-- Download cover images with numbered filenames
-- Generate `books.csv` and `books.json` files with all book data
-- Display progress as it processes each book
+Le programme va :
+- Récupérer toutes les catégories disponibles
+- Scraper tous les livres de chaque catégorie
+- Télécharger toutes les images
+- Sauvegarder les données en CSV et JSON
 
-### Sample Output
+ **Attention** : Le scraping complet peut prendre plusieurs heures !
+
+### Test avant scraping complet
+
+Pour tester le système avant le scraping complet :
+
+```bash
+python test_scraping.py
 ```
-✓ The Long Haul (Diary of a Wimpy Kid #9)
-✓ Old School (Diary of a Wimpy Kid #10)
-✓ I Know What I'm Doing -- and Other Lies I Tell Myself
-...
-Terminé! 10 livres récupérés.
+
+Ce script teste :
+- La récupération des catégories
+- Le scraping d'un livre spécifique
+- Le scraping des 3 premiers livres d'une catégorie
+
+### Analyse des résultats
+
+Après le scraping, analysez les résultats avec :
+
+```bash
+python analyze_results.py
 ```
 
-## Output Files
+## Structure du projet
 
-- `books.csv` - Spreadsheet format with all book data
-- `books.json` - JSON format with all book data
-- `images/` - Directory containing downloaded book cover images (numbered with cleaned titles)
+```
+projet1/
+├── main.py                 # Script principal
+├── scrape_books.py         # Logique de scraping des catégories
+├── scrape_book_details.py  # Scraping des détails de chaque livre
+├── character_cleaner.py    # Nettoyage des caractères parasites
+├── requirements.txt        # Dépendances Python
+├── images/                 # Dossier des images téléchargées
+├── all_books.csv          # Données en format CSV
+└── all_books.json         # Données en format JSON
+```
 
-## Data Fields
+## Données récupérées
 
-Each book record includes:
-- `number` - Sequential book number
-- `upc` - Universal Product Code
-- `title` - Book title
-- `price_including_tax` - Price with tax
-- `price_excluding_tax` - Price without tax
-- `number_available` - Stock availability count
-- `product_description` - Book description
-- `category` - Book category (Humor)
-- `review_rating` - Star rating (1-5)
-- `image_url` - Original image URL
-- `book_url` - Book detail page URL
-- `local_image_path` - Path to downloaded image
+Pour chaque livre, le scraper récupère :
 
-## Dependencies
+| Champ | Description |
+|-------|-------------|
+| `number` | Numéro séquentiel du livre |
+| `upc` | Code UPC unique |
+| `title` | Titre du livre (nettoyé) |
+| `price_including_tax` | Prix TTC |
+| `price_excluding_tax` | Prix HT |
+| `number_available` | Nombre d'exemplaires disponibles |
+| `product_description` | Description du livre (nettoyée) |
+| `category` | Catégorie du livre |
+| `review_rating` | Note sur 5 étoiles |
+| `image_url` | URL de l'image originale |
+| `book_url` | URL de la page du livre |
+| `local_image_path` | Chemin de l'image téléchargée |
 
-- `requests` - For making HTTP requests
-- `beautifulsoup4` - For HTML parsing
-- `lxml` - Fast XML/HTML parser
+## Images
 
-## Notes
+Les images sont automatiquement :
+- Téléchargées dans le dossier `images/`
+- Nommées avec le format : `XXX_titre-nettoyer.jpg`
+- Nettoyées des caractères spéciaux dans le nom
 
-- The scraper includes a 0.5-second delay between requests to be respectful to the server
-- Images are automatically downloaded and stored with cleaned filenames
-- The script handles pagination automatically until all pages are scraped
-- Generated files (`books.csv`, `books.json`, `images/`) are ignored by git
-- This project scrapes from the humor category but you can simply change the url to any category you want.
+## Nettoyage des données
+
+Le module `character_cleaner.py` nettoie automatiquement :
+- Les caractères Unicode problématiques
+- Les caractères de contrôle
+- Les espaces multiples
+- Les caractères spéciaux dans les noms de fichiers
+
+### Erreur de dépendances
+```bash
+# Réinstallez les dépendances
+pip install -r requirements.txt --force-reinstall
+```
+
+### Dossier images manquant
+Le dossier `images/` est créé automatiquement, mais vous pouvez le créer manuellement :
+```bash
+mkdir images
+```
