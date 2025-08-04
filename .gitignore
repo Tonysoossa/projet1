@@ -9,17 +9,7 @@ env/
 .venv/
 .env
 
-# IDE files
-.vscode/
-.idea/
-*.swp
-*.swo
-
-# OS files
-.DS_Store
-Thumbs.db
-
 # Project specific files to ignore
 images/
-books.csv
-books.json
+all_books.csv
+all_books.json
