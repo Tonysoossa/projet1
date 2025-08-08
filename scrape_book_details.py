@@ -81,20 +81,16 @@ def scrape_book_details(book_url, book_number):
         book_response.raise_for_status()
         book_soup = BeautifulSoup(book_response.text, 'lxml')
 
-        # Extract table data
         data = extract_table_data(book_soup)
 
-        # Extract title
         title_elem = book_soup.select('h1')
         title = cc.clean_text(title_elem[0].get_text(strip=True)) if title_elem else "Titre inconnu"
 
-        # Extract description
         desc_elem = book_soup.select('div#product_description + p')
         description = ""
         if desc_elem:
             description = cc.clean_description(desc_elem[0].get_text(strip=True))
 
-        # Extract category from breadcrumb
         breadcrumb_links = book_soup.select('ul.breadcrumb a')
         category = ""
         if len(breadcrumb_links) > 2:
@@ -111,7 +107,6 @@ def scrape_book_details(book_url, book_number):
         price_incl = cc.clean_price(data.get('Price (incl. tax)', ''))
         price_excl = cc.clean_price(data.get('Price (excl. tax)', ''))
 
-        # Return structured data
         return {
             'upc': cc.clean_text(data.get('UPC', '')),
             'title': title,
