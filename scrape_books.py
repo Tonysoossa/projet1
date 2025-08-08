@@ -1,11 +1,10 @@
 import os
 import requests
 from bs4 import BeautifulSoup
-import csv
-import json
 import time
 from urllib.parse import urljoin
 import scrape_book_details as sbd
+import save_data as sd
 
 def get_all_categories():
     """
@@ -47,14 +46,14 @@ def scrape_category_books(category_name, category_url, global_book_counter):
 
         if response.status_code == 404:
             print(f"Fin de la catégorie {category_name} (page {page-1})")
-            continue
+            break
 
         soup = BeautifulSoup(response.text, 'lxml')
         books = soup.select('.product_pod')
 
         if not books:
             print(f"Fin de la catégorie {category_name} (aucun livre sur la page {page})")
-            continue
+            pass
 
         for book in books:
             try:
@@ -69,7 +68,7 @@ def scrape_category_books(category_name, category_url, global_book_counter):
                 print(f"[{global_book_counter[0]:03d}] {book_data['title']}")
                 global_book_counter[0] += 1
 
-                time.sleep(0.2)
+                time.sleep(0.5)
 
             except Exception as e:
                 print(f"❌ Erreur lors du scraping d'un livre: {e}")
@@ -118,31 +117,7 @@ def scrape_all_categories():
 
         time.sleep(0.5)
 
-    save_data(all_books_data)
+    sd.save_data(all_books_data)
 
     print("\n SCRAPING TERMINÉ!")
     print(f"Total: {len(all_books_data)} livres récupérés")
-
-def save_data(all_books_data):
-    """
-    Sauvegarde les données dans des fichiers CSV et JSON
-    """
-    if not all_books_data:
-        print("Aucune donnée à sauvegarder")
-        return
-
-    fieldnames = ['number', 'upc', 'title', 'price_including_tax', 'price_excluding_tax',
-                  'number_available', 'product_description', 'category', 'review_rating',
-                  'image_url', 'book_url', 'local_image_path']
-
-    print("💾 Sauvegarde en CSV...")
-    with open('all_books.csv', 'w', newline='', encoding='utf-8') as f:
-        writer = csv.DictWriter(f, fieldnames=fieldnames)
-        writer.writeheader()
-        writer.writerows(all_books_data)
-
-    print("💾 Sauvegarde en JSON...")
-    with open('all_books.json', 'w', encoding='utf-8') as f:
-        json.dump(all_books_data, f, ensure_ascii=False, indent=2)
-
-    print("Données sauvegardées dans 'all_books.csv' et 'all_books.json'")
