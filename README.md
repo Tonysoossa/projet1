@@ -25,13 +25,6 @@ Ce projet permet de scraper automatiquement des livres par catégorie disponible
    pip install -r requirements.txt
    ```
 
-3. **Vérifier l'installation** avec le test :
-   ```bash
-   python test_scraping.py
-   ```
-
-## Utilisation
-
 ### Scraping complet (recommandé)
 
 Pour scraper **tous les livres de toutes les catégories** :
@@ -48,26 +41,6 @@ Le programme va :
 
  **Attention** : Le scraping complet peut prendre plusieurs heures !
 
-### Test avant scraping complet
-
-Pour tester le système avant le scraping complet :
-
-```bash
-python test_scraping.py
-```
-
-Ce script teste :
-- La récupération des catégories
-- Le scraping d'un livre spécifique
-- Le scraping des 3 premiers livres d'une catégorie
-
-### Analyse des résultats
-
-Après le scraping, analysez les résultats avec :
-
-```bash
-python analyze_results.py
-```
 
 ## Structure du projet
 
@@ -81,6 +54,7 @@ projet1/
 ├── images/                 # Dossier des images téléchargées
 ├── all_books.csv          # Données en format CSV
 └── all_books.json         # Données en format JSON
+└── save_data.py            # Sauvegarde des données
 ```
 
 ## Données récupérées
