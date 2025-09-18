@@ -29,7 +29,7 @@ def main():
         print("SCRAPING TERMINÉ AVEC SUCCÈS!")
 
     except KeyboardInterrupt:
-        print("\n\nInterruption détectée (Ctrl+C)")
+        print("\nInterruption détectée (Ctrl+C)")
         print("Arrêt du scraping en cours...")
         return
 
